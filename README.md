@@ -10,7 +10,7 @@ https://github.com/dagnelies/ractive-examples/tree/gh-pages
 
 ## Contributing
 
-**Please make your pull-request directly to `gh-pages`, not to *master*!**
+**Please make your pull-request directly to `gh-pages`, and *not* to `master`!**
 
 The demos are meant to be self-contained pages that can just be downloaded and it works.
 They should be minimalistic working examples, in the range of < 10kb.
