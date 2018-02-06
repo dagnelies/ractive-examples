@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {background-color:#eee;min-height:100%;font-family:Voltaire;}
+		.tiles {display:flex;flex-wrap: wrap;}
+		.tiles > * {margin:10px;border: 1px solid #ddd;background-color:#fff;cursor:pointer;transition:all 200ms linear;display:flex;align-items:center;}
+		.tiles > *:hover {background-color:#729D34;color:white;transform:scale(1.1);}
+		.tiles > * {flex: 300px;}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=user-list.html">View/Edit this code</a>
+		<h1>Movies with filters and infinite scrolling</h1>
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		
+		<div class="form-inline">
+			<input class="form-control" value="{{title_filter}}" placeholder="Search title..." />
+			
+			<div class="pull-right">
+				Find by
+				<select class="form-control" value="{{sort_by}}">
+					<option value="popularity.desc">Popularity</option>
+					<option value="release_date.desc">Latest Movies</option>
+					<option value="vote_average.desc">Best Ratings</option>
+					<option value="vote_count.desc">Most Ratings</option>
+					<option value="original_title.asc">A-Z</option>
+				</select>
+				with genre
+				<select class="form-control" value="{{genre}}">
+					<option value="">(any)</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="tiles">
+			{{#each movies}}
+				<div>
+					<img src="https://image.tmdb.org/t/p/w92{{.poster_path}}" />
+					<div style="padding:10px">
+						<h3>{{.title}}</h3>
+						<p><i><small>Release date: {{.release_date}}</small></i></p>
+						<p><small>Rating: {{.vote_average}}/10 <small>(of {{.vote_count}} votes)</small></small></p>
+						<!--p>{{.overview}}</p-->
+					</div>
+				</div>
+			{{/each}}
+		</div>
+	
+		
+	</script>
+
+	<script>
+		var page = 0; // an evil global variable ;)
+		var ractive = new Ractive({
+			el: '#target',
+			template: '#template',
+			data: {
+				movies: []
+			},
+			computed: {
+				url: function() { // this is automatically recomputed when related data changes
+					var title_filter = this.get('title_filter')
+					if( title_filter )
+						return 'https://api.themoviedb.org/3/search/movie?api_key=2498a34e67fe4a6a0a209316d830d942&query=' + window.encodeURIComponent(title_filter);
+					else
+						return 'https://api.themoviedb.org/3/discover/movie?api_key=2498a34e67fe4a6a0a209316d830d942&sort_by=' + this.get('sort_by') + '&with_genres=' + this.get('genre');
+				}
+			},
+			observe: {
+				url: function(value) { // this gets called when a variable changes, including a computed one
+					this.set('movies', [])
+					page = 0; // we can also reference outside stuff
+					this.loadMore();
+				}
+			},
+			loadMore: function() {
+				page++; // this is used for infinite scrolling
+				var url = this.get('url');
+				console.log('Loading ' + url + '&page=' + page)
+				var self = this; // the usual trick
+				$.ajax({
+					url: url + '&page=' + page,
+					success: function(data) {
+						for(var i in data.results)
+							self.push('movies', data.results[i])
+					}
+				})
+			}
+		});
+		
+		$(window).scroll(function(){
+			if($(window).scrollTop() == $(document).height() - $(window).height()){
+				ractive.loadMore();
+			}
+		});
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {background-color:#eee;min-height:100%;font-family:Voltaire;}
+		.tiles {display:flex;flex-wrap: wrap;}
+		.tiles > * {margin:10px;border: 1px solid #ddd;background-color:#fff;cursor:pointer;transition:all 200ms linear;display:flex;align-items:center;}
+		.tiles > *:hover {background-color:#729D34;color:white;transform:scale(1.1);}
+		.tiles > * {flex: 300px;}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=user-list.html">View/Edit this code</a>
+		<h1>Popular movies</h1>
+		
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<div class="tiles">
+			{{#each movies}}
+				<div on-click="set('selected', @index)">
+					<img src="https://image.tmdb.org/t/p/w92{{.poster_path}}" />
+					<div style="padding:10px">
+						<h3>{{.title}}</h3>
+						<!--p><i><small>Release date: {{.release_date}} - Rating: {{.vote_average}}/10</small></i></p>
+						<p>{{.overview}}</p-->
+					</div>
+				</div>
+			{{/each}}
+		</div>
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			el: '#target',
+			template: '#template',
+			data: {
+				movies: []
+			}
+		});
+		
+		
+		$.ajax({
+			url: 'https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=2498a34e67fe4a6a0a209316d830d942',
+			success: function(data) {
+				ractive.set('movies', data.results)
+			}
+		})
+	</script>
+</body>
+</html>
