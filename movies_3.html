@@ -7,6 +7,8 @@
 	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
 	<!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Bootstrap scripts -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<!-- Ractive -->
 	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
 	<!-- A bit of style -->
@@ -60,14 +62,36 @@
 		</div>
 	
 		<div id="details" class="modal fade" tabindex="-1" role="dialog">
-			<div class="modal-dialog" role="document">
+			<div class="modal-dialog" style="width: auto; margin: 30px;" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4 class="modal-title">Modal title</h4>
 					</div>
 					<div class="modal-body">
-						<p>One fine body&hellip;</p>
+						{{#with details}}
+						<div style="display:flex;">
+							<div>
+								<img src="https://image.tmdb.org/t/p/w342{{.poster_path}}" />
+							</div>
+							<div style="padding:10px">
+								<h3>{{.title}}</h3>
+								<p><i><small>Release date: {{.release_date}}</small></i></p>
+								<p><small>Rating: {{.vote_average}}/10 <small>(of {{.vote_count}} votes)</small></small></p>
+								<p>{{.overview}}</p>
+								<hr/>
+								<div>
+									{{#each .videos.results}}
+										{{#if .site == "YouTube"}}
+										 <iframe width="256" height="144"
+src="https://www.youtube.com/embed/{{.key}}">
+</iframe>
+										{{/if}}
+									{{/each}}
+								</div>
+							</div>
+						</div>
+						{{/with}}
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -124,13 +148,14 @@
 		});
 		
 		function showDetails(id) {
+			ractive.set('details', null);
 			$.ajax({
-				url: 'https://api.themoviedb.org/3/movie/' + id + '?api_key=2498a34e67fe4a6a0a209316d830d942',
+				url: 'https://api.themoviedb.org/3/movie/' + id + '?api_key=2498a34e67fe4a6a0a209316d830d942&append_to_response=videos',
 				success: function(data) {
-					for(var i in data.results)
-						self.push('movies', data.results[i])
+					ractive.set('details', data)
 				}
 			})
+			$('#details').modal('show')
 		}
 	</script>
 </body>
