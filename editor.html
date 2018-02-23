@@ -61,6 +61,7 @@
 		<div class="form-inline text-center" style="background-color:#eee; padding: 10px 20px;">
 			Demo:
 			<select class="form-control" value="{{demo_url}}">
+				<option></option>
 				<option>user-list.html</option>
 				<option>movies_1.html</option>
 				<option>movies_2.html</option>
@@ -83,6 +84,7 @@
 			template: '#template',
 			append: false,
 			data: {
+				demo_url: window.location.search.substr(5) || 'user-list.html',
 				source: 'Please select a demo!'
 			},
 			show: function() {
@@ -109,9 +111,6 @@
 				}
 			}
 		});
-		
-		var demo_url = window.location.search.substr(5) || 'user-list.html'; // fairly dirty, but it'll do
-		ractive.set('demo_url', demo_url);
 	</script>
 </body>
 </html>
