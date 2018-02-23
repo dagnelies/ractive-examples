@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {background-color:#eee;min-height:100%;font-family:Voltaire;}
+		.tiles {display:flex;flex-wrap: wrap;}
+		.tiles > * {margin:10px;border: 1px solid #ddd;background-color:#fff;cursor:pointer;transition:all 200ms linear;display:flex;align-items:center;}
+		.tiles > *:hover {background-color:#729D34;color:white;transform:scale(1.1);}
+		.tiles > * {flex: 300px;}
+.stars-bg {
+	position: relative;
+	display:inline-block;
+	color:#ccc;
+	font-size:1.3em;
+}
+.stars-fg {
+	position: absolute;
+	color:#729D34;
+	left:0;
+	overflow:hidden;
+	transition:color 200ms linear;
+}
+.tiles > *:hover .stars-fg {
+	color:gold;
+}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=movies_4.html">View/Edit this code</a>
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		{{>.view}}
+		
+		
+		{{#partial list}}
+			<h1>Movies <small>Single page app!</small></h1>
+			
+			<div class="pull-right">
+				<input class="form-control" value="{{title_filter}}" placeholder="Search title..." />
+			</div>
+
+			<ul class="nav nav-pills">
+				<li class-active="!title_filter && type == 'now_playing'" on-click="set('type','now_playing')"><a href="#">Now playing</a></li>
+				<li class-active="!title_filter && type == 'popular'" on-click="set('type','popular')"><a href="#">Popular</a></li>
+				<li class-active="!title_filter && type == 'top_rated'" on-click="set('type','top_rated')"><a href="#">Top rated</a></li>
+				<li class-active="!title_filter && type == 'upcoming'" on-click="set('type','upcoming')"><a href="#">Upcoming</a></li>
+			</ul>
+			
+			<div class="tiles">
+				{{#each movies}}
+					{{>movie_tile}}
+				{{/each}}
+			</div>
+		{{/partial}}
+		
+		
+		{{#partial overview}}
+			{{#with details}}
+			{{>movie_tabs}}
+			
+			<div style="display:flex;">
+				<div>
+					<img src="https://image.tmdb.org/t/p/w342{{.poster_path}}" />
+				</div>
+				<div style="padding:10px">
+					<p><i>Release date: {{.release_date}}</i></p>
+					<p>Rating: {{>stars}}</p>
+					<p>{{.overview}}</p>
+				</div>
+				<div>
+					{{#each .videos.results}}
+						{{#if .site == "YouTube"}}
+						 <iframe width="256" height="144" src="https://www.youtube.com/embed/{{.key}}"></iframe>
+						{{/if}}
+					{{/each}}
+				</div>
+			</div>
+			{{/with}}
+		{{/partial}}
+		
+		
+		{{#partial reviews}}
+			{{#with details}}
+			{{>movie_tabs}}
+			
+			<div>
+				{{#unless .reviews.results}}
+					<i>No reviews yet!</i>
+				{{/unless}}
+				{{#each .reviews.results}}
+				<p>{{.content}} <i>- {{.author}}</i></p>
+				<hr/>
+				{{/each}}
+			</div>
+			{{/with}}
+		{{/partial}}
+		
+		
+		{{#partial recommendations}}
+			{{#with details}}
+			{{>movie_tabs}}
+			
+			<div class="row">
+				<div class="col-md-6">
+					<h2>Recommendations</h2>
+					<div class="tiles">
+						{{#each .recommendations.results}}
+							{{>movie_tile}}
+						{{/each}}
+					</div>
+				</div>
+				<div class="col-md-6">
+					<h2>Similar movies</h2>
+					<div class="tiles">
+						{{#each .similar.results}}
+							{{>movie_tile}}
+						{{/each}}
+					</div>
+				</div>
+			</div>
+			{{/with}}
+		{{/partial}}
+		
+		
+		{{#partial movie_tile}}
+			<div onclick="showDetails({{.id}})">
+				<img src="https://image.tmdb.org/t/p/w92{{.poster_path}}" />
+				<div style="padding:10px">
+					<h3>{{.title}}</h3>
+					<p><i><small>{{.release_date}}</small></i></p>
+					<div>
+						{{>stars}}
+					</div>
+				</div>
+			</div>
+		{{/partial}}
+		
+		
+		{{#partial stars}}
+			<div class="stars-bg">&#9733;&#9733;&#9733;&#9733;&#9733;
+				<span class="stars-fg" style="width:{{.vote_average * 10}}%">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+			</div>
+			<small>{{.vote_count}} votes</small>
+		{{/partial}}
+		
+		
+		{{#partial movie_tabs}}
+			<a href="#" on-click="set('view', 'list')"><h3>Movies <small>Single page app!</small></h3></a>
+			<h1>{{.title}}</h1>
+			<ul class="nav nav-tabs nav-justified">
+				<li class-active="view == 'overview'" on-click="set('view', 'overview')"><a href="#overview">Overview</a></li>
+				<li class-active="view == 'reviews'" on-click="set('view', 'reviews')"><a href="#reviews">Reviews</a></li>
+				<li class-active="view == 'recommendations'" on-click="set('view', 'recommendations')"><a href="#recommend">Recommendations</a></li>
+			</ul>
+			
+			<hr/>
+		{{/partial}}
+	</script>
+
+	<script>
+		var page = 0; // an evil global variable ;)
+		var ractive = new Ractive({
+			el: '#target',
+			template: '#template',
+			data: {
+				movies: [],
+				view: 'list',
+				type: 'now_playing'
+			},
+			computed: {
+				url: function() { // this is automatically recomputed when related data changes
+					var title_filter = this.get('title_filter')
+					if( title_filter )
+						return 'https://api.themoviedb.org/3/search/movie?api_key=2498a34e67fe4a6a0a209316d830d942&query=' + window.encodeURIComponent(title_filter);
+					else
+						return 'https://api.themoviedb.org/3/movie/' + this.get('type') + '?api_key=2498a34e67fe4a6a0a209316d830d942'
+				}
+			},
+			observe: {
+				url: function(value) { // this gets called when a variable changes, including a computed one
+					this.set('movies', [])
+					page = 0; // we can also reference outside stuff
+					this.loadMore();
+				}
+			},
+			loadMore: function() {
+				page++; // this is used for infinite scrolling
+				var url = this.get('url');
+				console.log('Loading ' + url + '&page=' + page)
+				var self = this; // the usual trick
+				$.ajax({
+					url: url + '&page=' + page,
+					success: function(data) {
+						for(var i in data.results)
+							self.push('movies', data.results[i])
+					}
+				})
+			}
+		});
+		
+		$(window).scroll(function(){
+			if($(window).scrollTop() == $(document).height() - $(window).height()){
+				ractive.loadMore();
+			}
+		});
+		
+		function showDetails(id) {
+			ractive.set('details', null);
+			ractive.set('view', 'overview')
+			$.ajax({
+				url: 'https://api.themoviedb.org/3/movie/' + id + '?api_key=2498a34e67fe4a6a0a209316d830d942&append_to_response=videos,similar,reviews,recommendations',
+				success: function(data) {
+					ractive.set('details', data)
+				}
+			})
+		}
+	</script>
+</body>
+</html>
