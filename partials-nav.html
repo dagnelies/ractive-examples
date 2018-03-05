@@ -16,18 +16,17 @@
 </head>
 <body>
 	<div class="container">
-		<a class="pull-right" href="partials-nav.html?url=partials-nav.html">View/Edit this code</a>
+		<a class="pull-right" href="editor.html?url=partials-nav.html">View/Edit this code</a>
 		<h1>Navigation using partials</h1>
 		
 		<div id="target"></div>
 	</div>
 
 	<script id='template' type='text/ractive'>
-		<div>
-			<button class="btn btn-success" on-click="set('view','A')">View A</button>
-			<button class="btn btn-success" on-click="set('view','B')">View B</button>
-			<button class="btn btn-success" on-click="set('view','C')">View C</button>
-		</div>
+		<button class="btn btn-success" on-click="set('view','A')">View A</button>
+		<button class="btn btn-success" on-click="set('view','B')">View B</button>
+		<button class="btn btn-success" on-click="set('view','C')">View C</button>
+		<hr/>
 		
 		{{>.view}}
 		
