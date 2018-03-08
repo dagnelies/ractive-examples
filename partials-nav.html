@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {background-color:#eee;min-height:100%;font-family:Voltaire;}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=partials-nav.html">View/Edit this code</a>
+		<h1>Navigation using partials</h1>
+		
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<button class="btn btn-success" on-click="set('view','A')">View A</button>
+		<button class="btn btn-success" on-click="set('view','B')">View B</button>
+		<button class="btn btn-success" on-click="set('view','C')">View C</button>
+		<hr/>
+		
+		{{>.view}}
+		
+		{{#partial A}}
+			This is the content of A!
+		{{/partial}}
+		
+		{{#partial B}}
+			That's B's content, and the one of C is loaded asynchronously!
+		{{/partial}}
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				view: 'A'
+			},
+			partials: {
+				C: 'Loading...'
+			}
+		});
+		
+		$.get('https://www.w3.org/TR/PNG/iso_8859-1.txt', function(data) {
+			ractive.resetPartial('C', '<pre>' + data + '</pre>')
+		})
+	</script>
+</body>
+</html>
