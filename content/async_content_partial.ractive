@@ -1,0 +1,5 @@
+<p>Databinding fully works for this template piece</p>
+
+<input class="form-control" value="{{foo}}" />
+
+<p>Value: {{foo}}</p>

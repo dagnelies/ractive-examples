@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<script src='iro.min.js'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+			min-height:100%;
+			font-family:Voltaire;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
+		<h1>Color picker</h1>
+		
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<color-picker color="{{myColor}}" />
+		<h2>{{myColor}}</h2>
+		<input class="form-control" value="{{myColor}}" />
+	</script>
+
+	<script>
+		// or simply import:
+		// https://github.com/dagnelies/ractive-color-picker/bin/ractive-color-picker.min.js
+		Ractive.components['color-picker'] = Ractive.extend({
+			template: '<div></div>',
+			init: function() {
+				console.log('initializing color picker');
+				var self = this;
+				this.colorPicker = new iro.ColorPicker(this.find('div'), this.get());
+				this.colorPicker.on('color:change', function(color) {
+					if(self.updating)
+						return; // to avoid a feedback loop
+					console.log('color:change ' + color.hexString);
+					self.set('color', color.hexString)
+				});
+			},
+			observe: {
+				color: function(val) {
+					if(!this.colorPicker || !val)
+						return;
+					console.log('set color: ' + val);
+					this.updating = true; // to avoid a feedback loop
+					this.colorPicker.color.hexString = val;
+					this.updating = false;
+				}
+			}
+		})
+		
+		
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				myColor: '#f00'
+			}
+		});
+	</script>
+</body>
+</html>

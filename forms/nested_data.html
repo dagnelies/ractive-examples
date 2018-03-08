@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+			min-height:100%;
+			font-family:Voltaire;
+		}
+		h2 {
+			color: #729D34;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
+		<h1>Nested data</h1>
+		
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<div class="col-sm-6">
+			{{#with profile}}
+				<h2>&gt; {{firstname}} {{lastname}} <small>{{email}}</small></h2>
+				
+				<label>First name</label>
+				<input class="form-control" value="{{firstname}}" />
+				<label>Last name</label>
+				<input class="form-control" value="{{lastname}}" />
+			{{/with}}
+			<hr/>
+			{{#with address}}
+				<label>Street</label>
+				<input class="form-control" value="{{street}}" />
+				<label>City</label>
+				<input class="form-control" value="{{city}}" />
+				<label>Zip code</label>
+				<input class="form-control" value="{{zip}}" />
+			{{/with}}
+		</div>
+		<div class="col-sm-6">
+			The data:
+			<pre>{{JSON.stringify(this, null, 2)}}</pre>
+		</div>
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				profile: {},
+				address: {}
+			}
+		});
+	</script>
+</body>
+</html>
