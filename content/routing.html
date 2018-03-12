@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive@0.9.13/ractive.js'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+			min-height:100%;
+			font-family:Voltaire;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
+		<h1>Simple routing</h1>
+		
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<input class="form-control" value="{{foo}}" />
+		<input class="form-control" value="{{bar.boo}}" />
+		<input class="form-control" value="{{foobar}}" />
+		#{{hash}}
+	</script>
+
+	<script>
+		var routes = ['foo', 'bar.boo']
+		
+		var ractive = new Ractive({
+			lazy: 1000,
+			target: '#target',
+			template: '#template',
+			data: {
+				foo: '',
+				bar: {
+					boo: ''
+				}
+			},
+			computed: {
+				hash: {
+					get: function() {
+						var args = []
+						for(var r of routes) {
+							var val = this.get(r);
+							if( !val )
+								continue;
+							args.push(r + '=' + encodeURIComponent(val))
+						}
+						return args.join('&')
+					},
+					set: function(value) {
+						var update = {}
+						for(var r of routes)
+							update[r] = null
+						if(value) {
+							for(var pair of value.split('&')) {
+								var tokens = pair.split('=')
+								update[tokens[0]] = decodeURIComponent(tokens[1])
+							}
+						}
+						if(update)
+							this.set(update)
+					}
+				}
+			}
+		});
+		
+		
+		window.addEventListener("hashchange", updateModel)
+		
+		function updateModel() {
+			hash = window.location.hash
+			console.debug('window hash: ' + hash)
+			ractive.set('hash', hash.substr(1))
+		}
+		
+		updateModel()
+		
+		
+		ractive.observe('hash', function(value) {
+			console.debug('computed hash: ' + value)
+			window.location.hash = value
+		}, {init:false})
+		
+		/*
+		for(var r of routes) {
+			ractive.observe(r, function(val) {
+				console.log({r:val})
+				history.pushState({r:val});
+			})
+		}*/
+	</script>
+</body>
+</html>

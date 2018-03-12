@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {background-color:#eee;min-height:100%;font-family:Voltaire;}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=partials-nav.html">View/Edit this code</a>
+		
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<h1>Basic tabs</h1>
+		
+		<ul class="nav nav-tabs">
+			<li class-active="tabABC == 'A'" on-click="set('tabABC','A')"><a href="#">Tab A</a></li>
+			<li class-active="tabABC == 'B'" on-click="set('tabABC','B')"><a href="#">Tab B</a></li>
+			<li class-active="tabABC == 'C'" on-click="set('tabABC','C')"><a href="#">Tab C</a></li>
+		</ul>
+		<div>
+			Content of tab {{tabABC}}
+		</div>
+		
+		<hr/>
+		
+		<h1>Tab list</h1>
+		
+		<ul class="nav nav-tabs">
+			{{#each tabList}}
+			<li class-active="~/tabId == @key" on-click="set('tabId',@key)"><a href="#">{{.}}</a></li>
+			{{/each}}
+		</ul>
+		<div>
+			Content of tab {{tabList[tabId]}}
+		</div>
+		
+		<hr/>
+		
+		<h1>Structured Tabs</h1>
+		
+		<ul class="nav nav-tabs">
+			{{#each tabObj}}
+			<li class-active="~/tabId == @key" on-click="set('tabId',@key)"><a href="#">{{.label}}</a></li>
+			{{/each}}
+		</ul>
+		<div>
+			{{#with tabObj[tabId]}}
+				<p>{{.description}}</p>
+				{{>.partial}}
+			{{/with}}
+		</div>
+		{{>.view}}
+		
+		{{#partial contentA}}
+			This is the content of partial A!
+		{{/partial}}
+		
+		{{#partial contentB}}
+			That's partial B's content!
+		{{/partial}}
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				tabABC: 'A',
+				tabId: 0,
+				tabList: ['Apple', 'Banana', 'Candy'],
+				tabObj: [{
+					label:'Apple',
+					description:'A juicy fruit!',
+					partial: 'contentA'
+				},{
+					label:'Banana',
+					description:'A tasty fruit!',
+					partial: 'contentB'
+				},{
+					label:'Candy',
+					description:'Makes you fat!',
+					partial: null
+				}]
+			}
+		});
+	</script>
+</body>
+</html>
