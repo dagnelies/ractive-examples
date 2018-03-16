@@ -16,51 +16,41 @@
 			min-height:100%;
 			font-family:Voltaire;
 		}
+		
 	</style>
 </head>
 <body>
 	<div class="container">
 		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
-		<h1>Dynamic fields</h1>
+		<h1>TODO list</h1>
 		
 		<div id="target"></div>
 	</div>
 
 	<script id='template' type='text/ractive'>
-		<div class="col-sm-6">
-			{{#each fields}}
-				<label>{{@key}}</label>
-				<input class="form-control" value="{{.}}" />
-			{{/each}}
-			<hr/>
-			<div class="form-inline">
-				<input class="form-control" value="{{newField}}" />
-				<button class="btn btn-default" on-click="addField()">Add field</button>
-			</div>
+		{{#each tasks}}
+		<div fade-in-out class="input-group form-group">
+			<input class="form-control" value="{{.}}" />
+			<span class="input-group-btn">
+				<button class="btn btn-default" on-click="splice('tasks',@index,1)">X</button>
+			</span>
 		</div>
-		<div class="col-sm-6">
-			The data:
-			<pre>{{JSON.stringify(this, null, 2)}}</pre>
-		</div>
-
+		{{/each}}
+		<button class="btn btn-primary" on-click="push('tasks','')">Add task</button>
 	</script>
 
 	<script>
+		Ractive.transitions.fade = function(t, params) {
+			if( t.isIntro )
+				t.setStyle( 'opacity', 0 ); // hide it first
+			t.animateStyle('opacity', t.isIntro ? 1 : 0, {delay: 0, duration: 200, easing: 'linear'}).then( t.complete );
+		};
+
 		var ractive = new Ractive({
 			target: '#target',
 			template: '#template',
 			data: {
-				fields: {
-					'Field A': '',
-					'Field B': '',
-					'Field C': ''
-				},
-				newField: 'example'
-			},
-			addField: function() {
-				var name = this.get('newField');
-				this.set('fields.' + name, '');
-				this.set('newField', name + ' bis');
+				tasks: ['Make the simplest TODO list ever!']
 			}
 		});
 	</script>
