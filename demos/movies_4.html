@@ -82,7 +82,7 @@
 				<div>
 					{{#each .videos.results}}
 						{{#if .site == "YouTube"}}
-						 <iframe width="256" height="144" src="https://www.youtube.com/embed/{{.key}}"></iframe>
+						 <iframe width="256" height="144" src="https://www.youtube.com/embed/{{.key}}" allowfullscreen="true"></iframe>
 						{{/if}}
 					{{/each}}
 				</div>
