@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+			min-height:100%;
+			font-family:Voltaire;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
+		<h1>Drag & drop</h1>
+		<p>Drag & drop is a complex topic, showing itself in the vast diversity of use cases. The two extremes are "positional" drag & drop and the other is "data-based" drag & drop.</p>
+		<pre>
+			Positional: like in a graphical editor, move around elements. Here, solely their position changes.
+			            Also, the drop might be allowed or not depending on the drag target's position.
+			Data-based: like in windows explorer, you move files from the tree on the left, to the listing on the right or vice versa.
+			            Note that the data is moved around, how items are shown differs. Also, the drop might be allowed or not depending on the drop target's data.
+			
+			In both cases, additional constraints can be set:
+			- the dragging area could be limited
+			- some areas could allow/refuse the drag
+			- the dragging image/text
+			
+			Using HTML attributes is also difficult because it describes an interaction between different items/containers.
+			
+			---------------------------------
+			
+			Within ractive:
+			
+			- dragged items identified by keypath
+			- drop zone accept keypath prefix
+			- action:copy/move/trash
+			
+			
+			<dropzone action="move" drop-source="my.source.keypath" drop-target="my.target.keypath">
+				<ul class="list-group" as-droparea="'copy|move my.target.keypath [authorized.source.keypath.filter]'">
+					{{#each my.target.keypath}}
+						<li class="list-group-item" as-draggable>{{this}}</li>
+					{{/each}}
+				</ul>
+			</dropzone>
+			
+			
+		</pre>
+		
+		<h2>Native way</h2>
+		<div class="row">
+			<div class="col-sm-6">
+				<ul class="list-group">
+					<li class="list-group-item" draggable="true" ondragstart="drag(event)">Apple</li>
+					<li class="list-group-item" draggable="true" ondragstart="drag(event)">Banana</li>
+					<li class="list-group-item" draggable="true" ondragstart="drag(event)">Cherry</li>
+				</ul>
+			</div>
+			<div class="col-sm-6">
+				<ul class="list-group" ondrop="drop(event)" ondragover="allowDrop(event)" style="min-height:100px;">
+				</ul>
+			</div>
+		</div>
+		
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<h2>Data-based</h2>
+		<div class="row">
+			<div class="col-sm-6">
+				<ul class="list-group">
+					{{#each fruits}}
+						<li class="list-group-item" draggable="true" on-dragstart="drag(@event, @keypath)">{{this}}</li>
+					{{/each}}
+				</ul>
+			</div>
+			<div class="col-sm-6">
+				<ul class="list-group" on-drop="drop(@event)" on-dragover="allowDrop(@event)" style="min-height:100px;">
+				{{#each dropped}}
+					<li class="list-group-item">{{this}}</li>
+				{{/each}}
+				</ul>
+			</div>
+		</div>
+	</script>
+
+	<script>
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
+
+		function drag(ev) {
+			ev.dataTransfer.setData("text", ev.target.outerHTML);
+		}
+
+		function drop(ev) {
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("text");
+			ev.currentTarget.innerHTML += data;
+		}
+
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				fruits: ['Apple', 'Banana', 'Cherry', 'Donut'],
+				dropped: []
+			},
+			allowDrop: function(ev) {
+				console.log(ev);
+				ev.preventDefault();
+			},
+			drag: function(ev, kp) {
+				console.log(ev);
+				ev.dataTransfer.setData("text", kp);
+			},
+			drop: function(ev) {
+				console.log(ev);
+				ev.preventDefault();
+				var kp = ev.dataTransfer.getData("text");
+				this.push('dropped', this.get(kp));
+			}
+		});
+	</script>
+</body>
+</html>

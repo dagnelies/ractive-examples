@@ -22,7 +22,7 @@
 	</div>
 
 	<script id='template' type='text/ractive'>
-		<h1>Basic tabs</h1>
+		<h1>Static tabs displaying partials</h1>
 		
 		<ul class="nav nav-tabs">
 			<li class-active="tabABC == 'A'" on-click="set('tabABC','A')"><a href="#">Tab A</a></li>
@@ -35,20 +35,7 @@
 		
 		<hr/>
 		
-		<h1>Tab list</h1>
-		
-		<ul class="nav nav-tabs">
-			{{#each tabList}}
-			<li class-active="~/tabId == @key" on-click="set('tabId',@key)"><a href="#">{{.}}</a></li>
-			{{/each}}
-		</ul>
-		<div>
-			Content of tab {{tabList[tabId]}}
-		</div>
-		
-		<hr/>
-		
-		<h1>Structured Tabs</h1>
+		<h1>Dynamic tabs displaying data</h1>
 		
 		<ul class="nav nav-tabs">
 			{{#each tabObj}}
@@ -61,6 +48,11 @@
 				{{>.partial}}
 			{{/with}}
 		</div>
+		
+		<hr/>
+		
+		<p>There are many more ways...</p>
+		
 		{{>.view}}
 		
 		{{#partial contentA}}
