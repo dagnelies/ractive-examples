@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+			min-height:100%;
+			font-family:Voltaire;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<div>
+			<label>Static tooltip</label>
+			<input class="form-control" as-tooltip title="That's a static message" />
+		</div>
+		<br/>
+		<div>
+			<label>Dynamic tooltip</label>
+			<input class="form-control" value="{{msg}}" as-tooltip="msg" title="That's the default value" />
+		</div>
+		<p>Note: you will have to leave the input field and focus in again to see the updated tooltip.</p>
+	</script>
+
+	<script>
+		Ractive.decorators['tooltip'] = function(node, msg) {
+			if( msg )
+				node.title = msg
+			$(node).tooltip();
+			return {
+				update: function(arg) {
+					if( arg )
+						node.dataset['originalTitle'] = arg;
+					else
+						node.dataset['originalTitle'] = node.title;
+				},
+				teardown: function() {
+					$(node).tooltip('destroy')
+				}
+			}
+		}
+		
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template'
+		});
+	</script>
+</body>
+</html>
