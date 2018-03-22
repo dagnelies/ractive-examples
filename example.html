@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- Ace Stuff -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js'></script>
+	<script src='https://cdn.rawgit.com/dagnelies/ractive-ace/master/src/ractive-ace.js'></script>
+	
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Example Widget</h1>
+		
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<nav class="tabs" style="width:50%;">
+			<a class-active="view == 'result'" href="#result" on-click="set('view', 'result')">Result</a>
+			<a class-active="view == 'template'" href="#template" on-click="set('view', 'template')">Template</a>
+			<a class-active="view == 'script'" href="#script" on-click="set('view', 'script')">Script</a>
+			<a class-active="view == 'headers'" href="#headers" on-click="set('view', 'headers')">Headers</a>
+		</nav>
+		<div style="border: 5px solid #92bd54; height:310px;">
+			{{#if view == 'result'}}
+				<iframe id="output" style="width:100%;height:100%"></iframe>
+			{{elseif view == 'template'}}
+				<ace value="{{template}}"></ace>
+			{{elseif view == 'script'}}
+				<ace value="{{script}}" mode="javascript"></ace>
+			{{elseif view == 'headers'}}
+				<ace value="{{headers}}"></ace>
+			{{/if}}
+		</div>
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				view: 'template',
+				script: '',
+				template: '',
+				headers: ''
+			},
+			observe: {
+				view: function(value) {
+					if( value != 'result' )
+						return;
+					
+					var html = '<!DOCTYPE html>\n<html><head>' + this.get('headers') + '\n</head>\n<body>\n'
+					html += '\t<div id="target"></div>\n'
+					html += '\t<' + 'script id="template" type="ractive">' + this.get('template') + '\n\t<' + '/script>\n'
+					html += '\t<' + 'script>' + this.get('script') + '\n\t<' + '/script>\n'
+					html += '</body></html>'
+					
+					window.setTimeout(function() {
+						var iframe = document.getElementById('output');
+						iframe = iframe.contentWindow || ( iframe.contentDocument.document || iframe.contentDocument);
+						iframe.document.open();
+						iframe.document.write(html);
+						iframe.document.close();
+					}, 100)
+				}
+			}
+		});
+		
+		$.ajax({
+			url: 'template.html', // let's load itself in the example!
+			dataType: 'text', // otherwise fails to parse as invalid HTML
+			success: function(html) {
+				console.log(html)
+				ractive.set({
+					headers: extract(html, /<head>([^]+?)<\/head>/),
+					template: extract(html, /<script +id=.template.*?>([^]+?)<\/script>/),
+					script: extract(html, /<script>([^]+?)<\/script>/)
+				})
+			},
+			error: function(xhr,msg) {
+				console.warn(msg)
+			}
+		});
+		
+		function extract(html, pattern) {
+			var matches = pattern.exec(html)
+			if( !matches )
+				return ''
+			else
+				return matches[1].replace(/^\t\t?/gm, '')
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Voltaire;
+	padding: 10px;
+	margin: 0px;
+}
+header {
+	background-color: #729D34;
+	color: white;
+	text-align:center;
+	margin: -10px;
+}
+
+iframe {
+	display: block;
+	border: none;
+}
+
+h2 {
+	color: #729D34;
+}
+
+nav {
+	display: flex;
+	text-align: center;
+}
+
+nav.tabs a {
+	background-color: #ccc;
+	margin: 0px 10px;
+	border-radius: 10px 10px 0px 0px;
+}
+nav a {
+	flex: 1;
+	background-color: #729D34;
+	color: white;
+	text-decoration: none;
+	/*font-size: 1.2em;*/
+	padding:5px;
+	cursor: pointer;
+}
+
+nav a.active,
+nav a:active,
+nav a:hover,
+nav a:focus {
+	background-color: #92bd54;
+}
