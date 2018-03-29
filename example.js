@@ -35,6 +35,7 @@ Ractive.components['example'] = Ractive.extend({
 				template: '',
 				script: ''
 			})
+			//self.updateResult();
 			
 			if(!newUrl)
 				return;
@@ -56,6 +57,7 @@ Ractive.components['example'] = Ractive.extend({
 						template: extract(/<script +id=.template.*?>([^]+?)<\/script>/),
 						script: extract(/<script>([^]+?)<\/script>/)
 					})
+					self.updateResult();
 				},
 				error: function(xhr,msg) {
 					console.warn(msg)
@@ -63,23 +65,24 @@ Ractive.components['example'] = Ractive.extend({
 			});
 		},
 		view: function(value) {
-			if( value != 'result' )
-				return;
-			
-			var html = '<!DOCTYPE html>\n<html><head>' + this.get('headers') + '\n</head>\n<body>\n'
-			html += '\t<div id="target"></div>\n'
-			html += '\t<' + 'script id="template" type="ractive">' + this.get('template') + '\n\t<' + '/script>\n'
-			html += '\t<' + 'script>' + this.get('script') + '\n\t<' + '/script>\n'
-			html += '</body></html>'
-			
 			var self = this;
-			window.setTimeout(function() {
-				var iframe = self.find('iframe')
-				iframe = iframe.contentWindow || ( iframe.contentDocument.document || iframe.contentDocument);
-				iframe.document.open();
-				iframe.document.write(html);
-				iframe.document.close();
-			}, 100)
+			window.setTimeout(function() {self.updateResult()}, 100);
 		}
+	},
+	updateResult: function() {
+		if( this.get('view') != 'result' )
+			return;
+		
+		var html = '<!DOCTYPE html>\n<html><head>' + this.get('headers') + '\n</head>\n<body>\n'
+		html += '\t<div id="target"></div>\n'
+		html += '\t<' + 'script id="template" type="ractive">' + this.get('template') + '\n\t<' + '/script>\n'
+		html += '\t<' + 'script>' + this.get('script') + '\n\t<' + '/script>\n'
+		html += '</body></html>'
+		
+		var iframe = this.find('iframe')
+		iframe = iframe.contentWindow || ( iframe.contentDocument.document || iframe.contentDocument);
+		iframe.document.open();
+		iframe.document.write(html);
+		iframe.document.close();
 	}
 });
