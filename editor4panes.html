@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+	<title>Interactive demos</title>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	
+	<!-- Ace -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js'></script>
+	
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<script src='https://dagnelies.github.io/ractive-ace/bin/ractive-ace.min.js'></script>
+	<script src='https://dagnelies.github.io/ractive-split/bin/ractive-split.min.js'></script>
+	<link rel="stylesheet" href="https://dagnelies.github.io/ractive-split/bin/ractive-split.css">
+	
+	<!-- a bit of style -->
+	<style>
+		body {
+			font-family: Voltaire;
+		}
+		iframe {
+			border: none;
+		}
+		html,
+		body,
+		#target {
+			height: 100%;
+		}
+		#target {
+			display:flex;
+			flex-direction: column;
+		}
+		.panes{
+			flex: 1;
+		}
+		.pane {
+			position:relative;
+			display:flex;
+			flex-direction: column;
+			overflow: visible !important;
+		}
+		.pane > * {
+			flex:1;
+		}
+		.corner {
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+			border-radius: 10px 0px 0px 0px;
+			padding: 10px 20px 20px 15px;
+			z-index: 1;
+		}
+		</style>
+</head>
+<body>
+	<div id="target"></div>
+	
+	<script id='template' type='text/ractive'>
+		<div class="form-inline bg-primary" style="padding:5px 10px;">
+			<button class="btn btn-default"><i class="glyphicon glyphicon-play"></i> &nbsp; Run</button>
+			&nbsp;
+			<input type="checkbox" /> Autorun
+			<div class="pull-right">
+				<button class="btn btn-default"><i class="glyphicon glyphicon-cloud-download"></i> &nbsp; Load URL</button>
+				<input class="form-control" value="{{url}}" size="100" />
+				<button class="btn btn-default"><i class="glyphicon glyphicon-cloud-upload"></i> &nbsp; Save as URL</button>
+			</div>
+		</div>
+		<split direction="horizontal" class="panes">
+			<split direction="vertical">
+				<div class="pane">
+					<ace mode="handlebars" value="{{template}}" />
+					<div class="corner bg-primary">Ractive Template</div>
+				</div>
+				<div class="pane">
+					<ace mode="javascript" value="{{script}}" />
+					<span class="corner bg-primary">Script</span>
+				</div>
+			</split>
+			<split direction="vertical">
+				<div class="pane">
+					<ace mode="html" value="{{headers}}" />
+					<span class="corner bg-primary">Headers</span>
+				</div>
+				<div class="pane">
+					<iframe></iframe>
+					<span class="corner bg-primary">Result</span>
+				</div>
+			</split>
+		</split>
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				url: window.location.search.substr(5) || 'demos/user-list.html',
+				script: '',
+				template: '',
+				headers: ''
+			},
+			computed: {
+				html: function() {
+					return ''
+					var value = '<!DOCTYPE html>\n<html><head>' + this.get('headers') + '\n</head>\n<body>\n'
+					value += '\t<div id="target"></div>\n'
+					value += '\t<' + 'script id="template" type="ractive">' + this.get('template') + '\n\t<' + '/script>\n'
+					value += '\t<' + 'script>' + this.get('script') + '\n\t<' + '/script>\n'
+					value += '</body></html>'
+					return value
+				}
+			},
+			observe: {
+				url: function(newUrl) {
+					var self = this;
+					self.set({
+						headers: '',
+						template: '',
+						script: ''
+					})
+					
+					if(!newUrl)
+						return;
+					
+					$.ajax({
+						url: newUrl, // let's load itself in the example!
+						dataType: 'text', // otherwise fails to parse as invalid HTML
+						success: function(html) {
+							console.log(html)
+							function extract(pattern) {
+								var matches = pattern.exec(html)
+								if( !matches )
+									return ''
+								else
+									return matches[1].replace(/^\t\t?/gm, '').trim()
+							}
+							self.set({
+								headers: extract(/<head>([^]+?)<\/head>/),
+								template: extract(/<script +id=.template.*?>([^]+?)<\/script>/),
+								script: extract(/<script>([^]+?)<\/script>/)
+							})
+						},
+						error: function(xhr,msg) {
+							console.warn(msg)
+						}
+					});
+				},
+				html: {
+					init: false,
+					handler: function(value) {
+						var iframe = this.find('iframe')
+						iframe = iframe.contentWindow || ( iframe.contentDocument.document || iframe.contentDocument);
+						iframe.document.open();
+						iframe.document.write(value);
+						iframe.document.close();
+					}
+				}
+			}
+		});
+	</script>
+</body>
+</html>
