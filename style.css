@@ -1,6 +1,4 @@
-* {
-	box-sizing: border-box;
-}
+
 
 body {
 	font-family: Voltaire;
@@ -28,13 +26,23 @@ nav {
 	text-align: center;
 }
 
+.sidebar {
+	display: flex;
+	text-align: center;
+	flex-direction: column;
+}
+
+
 nav.tabs a {
 	background-color: #ccc;
 	margin: 0px 10px;
 	border-radius: 10px 10px 0px 0px;
 }
-nav a {
+nav.justified a {
 	flex: 1;
+}
+
+nav a {
 	background-color: #729D34;
 	color: white;
 	text-decoration: none;

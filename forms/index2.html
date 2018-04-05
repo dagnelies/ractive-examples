@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="../style.css">
+	
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	
+	<!-- Ace Stuff -->
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js'></script>
+	<script src='https://cdn.rawgit.com/dagnelies/ractive-ace/master/src/ractive-ace.js'></script>
+	<script src='../example.js'></script>
+</head>
+<body>
+	<nav class="vmenu">
+		<a class="active">Forms</a>
+		<a>Datatables</a>
+		<a>Content</a>
+		<a>Widgets</a>
+		<a>Misc</a>
+		<a>Demos</a>
+	</nav>
+	
+	<div>
+		<h2>Forms</h2>
+		<div id="target" style="padding:10px"></div>
+	</div>
+
+	
+
+	
+	
+	<script id='template' type='text/ractive'>
+		<h2>Nested data</h2>
+		<example url="nested_data.html" />
+		
+		<h2>Simple TODO list</h2>
+		<example url="TODO.html" />
+		
+		<h2>Dynamic fields</h2>
+		<example url="dynamic_fields.html" />
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template'
+		});
+	</script>
+	
+</body>
+</html>

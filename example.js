@@ -1,14 +1,19 @@
 Ractive.components['example'] = Ractive.extend({
 	template: `
-		<nav class="tabs" style="width:50%;">
+		<nav class="tabs justified">
 			<a class-active="view == 'result'" href="#result" on-click="set('view', 'result')">Result</a>
 			<a class-active="view == 'template'" href="#template" on-click="set('view', 'template')">Template</a>
 			<a class-active="view == 'script'" href="#script" on-click="set('view', 'script')">Script</a>
 			<a class-active="view == 'headers'" href="#headers" on-click="set('view', 'headers')">Headers</a>
+			<span style="flex:2"></span>
+			<a style="flex:0" href="{{url}}">B</a>
+			<a style="flex:0" href="https://github.com/dagnelies/ractive-examples/tree/gh-pages/{{url}}">G</a>
+			<a style="flex:0" href="editor4panes.html?url={{url}}">E</a>
 		</nav>
+		
 		<div style="border: 5px solid #92bd54; height:310px;">
 			{{#if view == 'result'}}
-				<iframe style="width:100%;height:100%"></iframe>
+				<iframe style="width:100%;height:100%" src="{{url}}"></iframe>
 			{{elseif view == 'template'}}
 				<ace value="{{template}}"></ace>
 			{{elseif view == 'script'}}
@@ -57,32 +62,11 @@ Ractive.components['example'] = Ractive.extend({
 						template: extract(/<script +id=.template.*?>([^]+?)<\/script>/),
 						script: extract(/<script>([^]+?)<\/script>/)
 					})
-					self.updateResult();
 				},
 				error: function(xhr,msg) {
 					console.warn(msg)
 				}
 			});
-		},
-		view: function(value) {
-			var self = this;
-			window.setTimeout(function() {self.updateResult()}, 100);
 		}
-	},
-	updateResult: function() {
-		if( this.get('view') != 'result' )
-			return;
-		
-		var html = '<!DOCTYPE html>\n<html><head>' + this.get('headers') + '\n</head>\n<body>\n'
-		html += '\t<div id="target"></div>\n'
-		html += '\t<' + 'script id="template" type="ractive">' + this.get('template') + '\n\t<' + '/script>\n'
-		html += '\t<' + 'script>' + this.get('script') + '\n\t<' + '/script>\n'
-		html += '</body></html>'
-		
-		var iframe = this.find('iframe')
-		iframe = iframe.contentWindow || ( iframe.contentDocument.document || iframe.contentDocument);
-		iframe.document.open();
-		iframe.document.write(html);
-		iframe.document.close();
 	}
 });
