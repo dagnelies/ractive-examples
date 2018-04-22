@@ -1,5 +1,5 @@
 html, body {
-	min-height: 100%;
+	height: 100%;
 }
 
 body {
@@ -12,7 +12,6 @@ header {
 	background-color: #729D34;
 	color: white;
 	text-align:center;
-	margin: -10px;
 }
 
 iframe {
@@ -26,6 +25,7 @@ h2 {
 
 nav {
 	text-align: center;
+	display: flex;
 }
 
 .sidebar {
@@ -49,6 +49,7 @@ nav.justified a {
 	display: block;
 }
 
+.btn,
 nav a {
 	background-color: #729D34;
 	color: white;
@@ -63,4 +64,8 @@ nav a:active,
 nav a:hover,
 nav a:focus {
 	background-color: #92bd54;
+}
+
+.round {
+	border-radius: 50%;
 }

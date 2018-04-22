@@ -14,35 +14,29 @@
 	<script src='https://cdn.rawgit.com/dagnelies/ractive-ace/master/src/ractive-ace.js'></script>
 	<script src='example.js'></script>
 </head>
-<body id="target" style="display:flex;flex-direction:column;">
+<body id="target" style="display:flex">
 	
 	<script id='template' type='text/ractive'>
-		<header>	
-			<h1 style="margin:0px; padding:5px;">Examples & Recipies</h1>
-			<nav class="justified">
-				{{#each groups}}
-				<a href="#" on-click="set('selected.group',@key)">{{@key}}</a> &nbsp;
+		<nav class="sidebar">
+		{{#each groups}}
+			<a class-active="~/selected.group == @key" on-click="set('selected',{group:@key})">{{@key}}</a>
+			{{#if ~/selected.group == @key}}
+				<nav>
+				{{#each .}}
+					<a class-active="~/selected.example == @key" on-click="set('selected.example',@key)">{{@key}}</a>
 				{{/each}}
-			</nav>
-		</header>
-		<h2 style="text-align:center">{{selected.example}}</h2>
-		<div style="flex:1;padding:10px;display:flex;align-items:center;">
-			<div>
-				<a class="round btn" style="padding: 4px 10px; margin:10px;"><b>&lt;</b></a>
-			</div>
+				</nav>
+			{{/if}}
+		{{/each}}
+		</nav>
+	
+		<div style="flex:1; padding:10px;">
+			<h1 style="margin:0px; padding:5px;">Examples & Recipies</h1>
 			
-			<example url="{{example_url}}" style="flex:1;height:100%;"/>
-			
-			<a class="round btn" style="padding: 4px 10px;margin:10px;"><b>&gt;</b></a>
+			{{#if example_url}}
+				<example url="{{example_url}}" />
+			{{/if}}
 		</div>
-		
-		<p style="padding:5px; text-align:center">
-			<a class="round btn" style="padding: 4px 10px;"><b>&lt;</b></a>
-			{{#each groups[selected.group]}}
-				<a href="#" on-click="set('selected.example',@key)">{{@key}}</a> &nbsp;
-			{{/each}}
-			<a class="btn btn-primary">&gt;</a>
-		</p>
 	</script>
 
 	<script>
@@ -50,10 +44,6 @@
 			target: '#target',
 			template: '#template',
 			data: {
-				selected: {
-					group: 'Forms',
-					example: 'Nested data'
-				},
 				groups: {
 					Forms: {
 						'Nested data': 'forms/nested_data.html',

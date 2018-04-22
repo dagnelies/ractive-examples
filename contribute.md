@@ -16,42 +16,24 @@
 			min-height:100%;
 			font-family:Voltaire;
 		}
-		
 	</style>
 </head>
 <body>
 	<div class="container">
 		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
-		<h1>TODO list</h1>
+		<h1>Title</h1>
 		
 		<div id="target"></div>
 	</div>
 
 	<script id='template' type='text/ractive'>
-		{{#each tasks}}
-		<div fade-in-out class="input-group form-group">
-			<input class="form-control" value="{{.}}" />
-			<span class="input-group-btn">
-				<button class="btn btn-default" on-click="@this.splice('tasks',@index,1)">X</button>
-			</span>
-		</div>
-		{{/each}}
-		<button class="btn btn-primary" on-click="@this.push('tasks','')">Add task</button>
+		Hello template!
 	</script>
 
 	<script>
-		Ractive.transitions.fade = function(t, params) {
-			if( t.isIntro )
-				t.setStyle( 'opacity', 0 ); // hide it first
-			t.animateStyle('opacity', t.isIntro ? 1 : 0, {delay: 0, duration: 200, easing: 'linear'}).then( t.complete );
-		};
-
 		var ractive = new Ractive({
 			target: '#target',
-			template: '#template',
-			data: {
-				tasks: ['Make the simplest TODO list ever!']
-			}
+			template: '#template'
 		});
 	</script>
 </body>
