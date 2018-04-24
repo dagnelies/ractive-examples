@@ -19,21 +19,19 @@
 	</style>
 </head>
 <body>
-	<div class="container">
-		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
-		<h1>Title</h1>
-		
-		<div id="target"></div>
-	</div>
+	<div id="target" class="container"></div>
 
 	<script id='template' type='text/ractive'>
-		Hello template!
+		<h1>Hello {{foo}}!</h1>
 	</script>
 
 	<script>
 		var ractive = new Ractive({
 			target: '#target',
-			template: '#template'
+			template: '#template',
+			data: {
+				foo: 'my template!'
+			}
 		});
 	</script>
 </body>

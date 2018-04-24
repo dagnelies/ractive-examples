@@ -20,17 +20,15 @@
 	</style>
 </head>
 <body>
-	<div id="target"></div>
+	<div id="target" class="container"></div>
 
 	<script id='template' type='text/ractive'>
-		<div class="container">
-			<div class="col-xs-6">
-				<color-picker color="{{myColor}}" width="200" height="200"/>
-			</div>
-			<div class="col-xs-6">
-				<h2>{{myColor}}</h2>
-				<input class="form-control" value="{{myColor}}" />
-			</div>
+		<div class="col-xs-6">
+			<color-picker color="{{myColor}}" width="200" height="200"/>
+		</div>
+		<div class="col-xs-6">
+			<h2>{{myColor}}</h2>
+			<input class="form-control" value="{{myColor}}" />
 		</div>
 	</script>
 

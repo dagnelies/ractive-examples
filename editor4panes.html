@@ -109,7 +109,7 @@
 			},
 			run: function() {
 				var value = '<!DOCTYPE html>\n<html><head>' + this.get('headers') + '\n</head>\n<body>\n'
-				value += '\t<div id="target"></div>\n'
+				value += '\t<div id="target" class="container"></div>\n'
 				value += '\t<' + 'script id="template" type="ractive">' + this.get('template') + '\n\t<' + '/script>\n'
 				value += '\t<' + 'script>' + this.get('script') + '\n\t<' + '/script>\n'
 				value += '</body></html>'

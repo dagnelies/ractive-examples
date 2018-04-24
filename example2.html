@@ -13,9 +13,7 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div class="container">
-		<div id="target"></div>
-	</div>
+	<div id="target" class="container"></div>
 
 	<script id='template' type='text/ractive'>
 		<example title="Example widget" url="template.html" />
@@ -92,7 +90,7 @@
 						return;
 					
 					var html = '<!DOCTYPE html>\n<html><head>' + this.get('headers') + '\n</head>\n<body>\n'
-					html += '\t<div id="target"></div>\n'
+					html += '\t<div id="target" class="container"></div>\n'
 					html += '\t<' + 'script id="template" type="ractive">' + this.get('template') + '\n\t<' + '/script>\n'
 					html += '\t<' + 'script>' + this.get('script') + '\n\t<' + '/script>\n'
 					html += '</body></html>'

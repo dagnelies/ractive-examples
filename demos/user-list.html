@@ -18,18 +18,7 @@
 	</style>
 </head>
 <body>
-	<div class="container">
-		<a class="pull-right" href="editor.html?url=user-list.html">View/Edit this code</a>
-		<h1>Some random users...</h1>
-		
-		<div id="target"></div>
-		
-		<h2>Related topics</h2>
-		
-		<p><a href="#TODO">Showing user details on click</a></p>
-		<p><a href="#TODO">Add/Edit users using modal dialogs</a></p>
-		<p><a href="#TODO">Addding paging & filtering</a></p>
-	</div>
+	<div id="target" class="container"></div>
 
 	<script id='template' type='text/ractive'>
 		<button class="btn btn-success" on-click="@this.addUsers(1)">Add 1 user</button>

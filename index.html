@@ -51,7 +51,10 @@
 			width: 100%;
 			height: 300px;
 		}
-		.tile-icons {
+		.tile-icons a {
+			margin: 0px 5px;
+		}
+		.tile-icons .fa {
 			font-size: 1.3em;
 		}
 	</style>
@@ -73,9 +76,9 @@
 				<div class="col-sm-6 col-md-4">
 					<div class="tile">
 						<div class="pull-right tile-icons">
-							<a href="editor4panes.html?url={{this}}"><i class="fa fa-pencil"></i></a>
-							<a href="https://github.com/dagnelies/ractive-examples/blob/gh-pages/{{this}}"><i class="fa fa-github"></i></a>
-							<a href="{{this}}" target="_blank"><i class="fa fa-window-maximize"></i></a>
+							<a href="editor4panes.html?url={{this}}"><i class="fa fa-pencil"></i> Edit</a>
+							<a href="https://github.com/dagnelies/ractive-examples/blob/gh-pages/{{this}}"><i class="fa fa-github"></i> Github</a>
+							<a href="{{this}}" target="_blank"><i class="fa fa-window-maximize"></i> View</a>
 						</div>
 						<h3>{{@key}}</h3>
 						<iframe src="{{this}}"></iframe>
