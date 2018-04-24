@@ -2,9 +2,10 @@
 <html>
 <head>
 	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="libs/bootstrap-3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="libs/bootstrap-3.3.7/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Hind:400,600,700">
+	
 	<!-- Font awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!-- Ractive -->
@@ -12,25 +13,15 @@
 	<!-- A bit of style -->
 	<style>
 		body {
-			font-family: Voltaire;
 			background-color: #eee;
 		}
 		
 		header {
-			background-color: #729D34;
-			color: white;
 			text-align:center;
 			padding: 1px;
 			margin: 0px;
 		}
 		
-		h2 {
-			color: #729D34;
-		}
-		.tiles {
-			display: flex;
-			flex-wrap: wrap;
-		}
 		.tile {
 			margin: 20px 0px;
 			padding: 10px;
@@ -57,18 +48,29 @@
 		.tile-icons .fa {
 			font-size: 1.3em;
 		}
+		.tile h3 {
+			margin-top:10px;
+		}
+		h1,h2,h3 {
+			font-weight: 700;
+		}
+		h3 {
+			color: #555;
+		}
 	</style>
 </head>
 <body>
-	<header>
-		<h1>Examples & Recipies</h1>
+	<header class="bg-primary">
+		<a href="https://ractive.js.org/" class="pull-left"><img src="https://ractive.js.org/static/img/avatar.svg" style="height:50px;margin:10px;"></a>
+		<a href="https://github.com/dagnelies/ractive-examples/tree/gh-pages" class="pull-right"><i class="fa fa-github" style="color:white;font-size:50px;margin:10px;"></i></a>
+		<h1>Ractive Examples</h1>
 	</header>
 
 	<div id="target" class="container-fluid"></div>
 	
 	<script id='template' type='text/ractive'>
 		{{#each groups}}
-			<h2 class="text-center">{{@key}}</h2>
+			<h2 class="text-center text-primary">{{@key}}</h2>
 			
 			<div class="row">
 				{{#each this}}
