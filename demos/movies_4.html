@@ -52,10 +52,10 @@
 			</div>
 
 			<ul class="nav nav-pills">
-				<li class-active="!title_filter && type == 'now_playing'" on-click="set('type','now_playing')"><a href="#">Now playing</a></li>
-				<li class-active="!title_filter && type == 'popular'" on-click="set('type','popular')"><a href="#">Popular</a></li>
-				<li class-active="!title_filter && type == 'top_rated'" on-click="set('type','top_rated')"><a href="#">Top rated</a></li>
-				<li class-active="!title_filter && type == 'upcoming'" on-click="set('type','upcoming')"><a href="#">Upcoming</a></li>
+				<li class-active="!title_filter && type == 'now_playing'" on-click="@this.set('type','now_playing')"><a href="#">Now playing</a></li>
+				<li class-active="!title_filter && type == 'popular'" on-click="@this.set('type','popular')"><a href="#">Popular</a></li>
+				<li class-active="!title_filter && type == 'top_rated'" on-click="@this.set('type','top_rated')"><a href="#">Top rated</a></li>
+				<li class-active="!title_filter && type == 'upcoming'" on-click="@this.set('type','upcoming')"><a href="#">Upcoming</a></li>
 			</ul>
 			
 			<div class="tiles">
@@ -157,12 +157,12 @@
 		
 		
 		{{#partial movie_tabs}}
-			<a href="#" on-click="set('view', 'list')"><h3>Movies <small>Single page app!</small></h3></a>
+			<a href="#" on-click="@this.set('view', 'list')"><h3>Movies <small>Single page app!</small></h3></a>
 			<h1>{{.title}}</h1>
 			<ul class="nav nav-tabs nav-justified">
-				<li class-active="view == 'overview'" on-click="set('view', 'overview')"><a href="#overview">Overview</a></li>
-				<li class-active="view == 'reviews'" on-click="set('view', 'reviews')"><a href="#reviews">Reviews</a></li>
-				<li class-active="view == 'recommendations'" on-click="set('view', 'recommendations')"><a href="#recommend">Recommendations</a></li>
+				<li class-active="view == 'overview'" on-click="@this.set('view', 'overview')"><a href="#overview">Overview</a></li>
+				<li class-active="view == 'reviews'" on-click="@this.set('view', 'reviews')"><a href="#reviews">Reviews</a></li>
+				<li class-active="view == 'recommendations'" on-click="@this.set('view', 'recommendations')"><a href="#recommend">Recommendations</a></li>
 			</ul>
 			
 			<hr/>

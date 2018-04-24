@@ -26,7 +26,7 @@
 			<h2>Fetching raw text</h2>
 			<div class="input-group">
 				<span class="input-group-btn">
-					<button class="btn btn-default" on-click="updateContent()">Fetch content</button>
+					<button class="btn btn-default" on-click="@this.updateContent()">Fetch content</button>
 				</span>
 				<input class="form-control" value="{{urlContent}}" />
 			</div>
@@ -37,7 +37,7 @@
 			<h2>Fetching a template piece</h2>
 			<div class="input-group">
 				<span class="input-group-btn">
-					<button class="btn btn-default" on-click="updatePartial()">Fetch template piece</button>
+					<button class="btn btn-default" on-click="@this.updatePartial()">Fetch template piece</button>
 				</span>
 				<input class="form-control" value="{{urlPartial}}" />
 			</div>

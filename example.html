@@ -21,10 +21,10 @@
 
 	<script id='template' type='text/ractive'>
 		<nav class="tabs" style="width:50%;">
-			<a class-active="view == 'result'" href="#result" on-click="set('view', 'result')">Result</a>
-			<a class-active="view == 'template'" href="#template" on-click="set('view', 'template')">Template</a>
-			<a class-active="view == 'script'" href="#script" on-click="set('view', 'script')">Script</a>
-			<a class-active="view == 'headers'" href="#headers" on-click="set('view', 'headers')">Headers</a>
+			<a class-active="view == 'result'" href="#result" on-click="@this.set('view', 'result')">Result</a>
+			<a class-active="view == 'template'" href="#template" on-click="@this.set('view', 'template')">Template</a>
+			<a class-active="view == 'script'" href="#script" on-click="@this.set('view', 'script')">Script</a>
+			<a class-active="view == 'headers'" href="#headers" on-click="@this.set('view', 'headers')">Headers</a>
 		</nav>
 		<div style="border: 5px solid #92bd54; height:310px;">
 			{{#if view == 'result'}}

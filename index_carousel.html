@@ -21,7 +21,7 @@
 			<h1 style="margin:0px; padding:5px;">Examples & Recipies</h1>
 			<nav class="justified">
 				{{#each groups}}
-				<a href="#" on-click="set('selected.group',@key)">{{@key}}</a> &nbsp;
+				<a href="#" on-click="@this.set('selected.group',@key)">{{@key}}</a> &nbsp;
 				{{/each}}
 			</nav>
 		</header>
@@ -39,7 +39,7 @@
 		<p style="padding:5px; text-align:center">
 			<a class="round btn" style="padding: 4px 10px;"><b>&lt;</b></a>
 			{{#each groups[selected.group]}}
-				<a href="#" on-click="set('selected.example',@key)">{{@key}}</a> &nbsp;
+				<a href="#" on-click="@this.set('selected.example',@key)">{{@key}}</a> &nbsp;
 			{{/each}}
 			<a class="btn btn-primary">&gt;</a>
 		</p>

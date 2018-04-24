@@ -19,11 +19,11 @@
 	<script id='template' type='text/ractive'>
 		<nav class="sidebar">
 		{{#each groups}}
-			<a class-active="~/selected.group == @key" on-click="set('selected',{group:@key})">{{@key}}</a>
+			<a class-active="~/selected.group == @key" on-click="@this.set('selected',{group:@key})">{{@key}}</a>
 			{{#if ~/selected.group == @key}}
 				<nav>
 				{{#each .}}
-					<a class-active="~/selected.example == @key" on-click="set('selected.example',@key)">{{@key}}</a>
+					<a class-active="~/selected.example == @key" on-click="@this.set('selected.example',@key)">{{@key}}</a>
 				{{/each}}
 				</nav>
 			{{/if}}

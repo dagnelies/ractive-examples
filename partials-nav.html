@@ -23,9 +23,9 @@
 	</div>
 
 	<script id='template' type='text/ractive'>
-		<button class="btn btn-success" on-click="set('view','A')">View A</button>
-		<button class="btn btn-success" on-click="set('view','B')">View B</button>
-		<button class="btn btn-success" on-click="set('view','C')">View C</button>
+		<button class="btn btn-success" on-click="@this.set('view','A')">View A</button>
+		<button class="btn btn-success" on-click="@this.set('view','B')">View B</button>
+		<button class="btn btn-success" on-click="@this.set('view','C')">View C</button>
 		<hr/>
 		
 		{{>.view}}

@@ -32,9 +32,9 @@
 	</div>
 
 	<script id='template' type='text/ractive'>
-		<button class="btn btn-success" on-click="addUsers(1)">Add 1 user</button>
-		<button class="btn btn-success" on-click="addUsers(100)">Add 100 users</button>
-		<button class="btn btn-success" on-click="set('users', [])">Clear</button>
+		<button class="btn btn-success" on-click="@this.addUsers(1)">Add 1 user</button>
+		<button class="btn btn-success" on-click="@this.addUsers(100)">Add 100 users</button>
+		<button class="btn btn-success" on-click="@this.set('users', [])">Clear</button>
 		<hr/>
 		
 		{{#each users}}
