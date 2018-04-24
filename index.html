@@ -1,48 +1,90 @@
 <!doctype html>
 <html>
 <head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="style.css">
-	
-	<!-- JQuery -->
-	<script src="libs/jquery-3.3.1.min.js"></script>
+	<!-- Font awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<!-- Ractive -->
-	<script src='libs/ractive.min.js'></script>
-	
-	<!-- Ace Stuff -->
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js'></script>
-	<script src='https://cdn.rawgit.com/dagnelies/ractive-ace/master/src/ractive-ace.js'></script>
-	<script src='example.js'></script>
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			font-family: Voltaire;
+			background-color: #eee;
+		}
+		
+		header {
+			background-color: #729D34;
+			color: white;
+			text-align:center;
+			padding: 1px;
+			margin: 0px;
+		}
+		
+		h2 {
+			color: #729D34;
+		}
+		.tiles {
+			display: flex;
+			flex-wrap: wrap;
+		}
+		.tile {
+			margin: 20px 0px;
+			padding: 10px;
+			background-color: #fff;
+			box-shadow: 0px 0px 10px #555;
+		}
+		
+		.tiles > * {
+			margin: 10px;
+			padding: 10px;
+			flex: 1 1 400px;
+			background-color: #fff;
+			box-shadow: 0px 0px 10px black;
+		}
+		
+		iframe {
+			border: 1px solid #aaa;
+			width: 100%;
+			height: 300px;
+		}
+		.tile-icons {
+			font-size: 1.3em;
+		}
+	</style>
 </head>
-<body id="target" style="display:flex;flex-direction:column;">
+<body>
+	<header>
+		<h1>Examples & Recipies</h1>
+	</header>
+
+	<div id="target" class="container-fluid"></div>
 	
 	<script id='template' type='text/ractive'>
-		<header>	
-			<h1 style="margin:0px; padding:5px;">Examples & Recipies</h1>
-			<nav class="justified">
-				{{#each groups}}
-				<a href="#" on-click="set('selected.group',@key)">{{@key}}</a> &nbsp;
+		{{#each groups}}
+			<h2 class="text-center">{{@key}}</h2>
+			
+			<div class="row">
+				{{#each this}}
+				{{#if this != 'contribute.md'}}
+				<div class="col-sm-6 col-md-4">
+					<div class="tile">
+						<div class="pull-right tile-icons">
+							<a href="editor4panes.html?url={{this}}"><i class="fa fa-pencil"></i></a>
+							<a href="https://github.com/dagnelies/ractive-examples/blob/gh-pages/{{this}}"><i class="fa fa-github"></i></a>
+							<a href="{{this}}" target="_blank"><i class="fa fa-window-maximize"></i></a>
+						</div>
+						<h3>{{@key}}</h3>
+						<iframe src="{{this}}"></iframe>
+					</div>
+				</div>
+				{{/if}}
 				{{/each}}
-			</nav>
-		</header>
-		<h2 style="text-align:center">{{selected.example}}</h2>
-		<div style="flex:1;padding:10px;display:flex;align-items:center;">
-			<div>
-				<a class="round btn" style="padding: 4px 10px; margin:10px;"><b>&lt;</b></a>
 			</div>
-			
-			<example url="{{example_url}}" style="flex:1;height:100%;"/>
-			
-			<a class="round btn" style="padding: 4px 10px;margin:10px;"><b>&gt;</b></a>
-		</div>
-		
-		<p style="padding:5px; text-align:center">
-			<a class="round btn" style="padding: 4px 10px;"><b>&lt;</b></a>
-			{{#each groups[selected.group]}}
-				<a href="#" on-click="set('selected.example',@key)">{{@key}}</a> &nbsp;
-			{{/each}}
-			<a class="btn btn-primary">&gt;</a>
-		</p>
+		{{/each}}
 	</script>
 
 	<script>
@@ -50,10 +92,6 @@
 			target: '#target',
 			template: '#template',
 			data: {
-				selected: {
-					group: 'Forms',
-					example: 'Nested data'
-				},
 				groups: {
 					Forms: {
 						'Nested data': 'forms/nested_data.html',
@@ -70,11 +108,11 @@
 						'Row key navigation': 'contribute.md'
 					},
 					Widgets: {
-						'Carousel': 'widgets/carousel.html',
-						'Date picker': 'widgets/date-picker.html',
+						'Carousel': 'contribute.md',
+						'Date picker': 'contribute.md',
 						'Color picker': 'widgets/color-picker.html',
-						'Multicolumn autocomplete': 'widgets/multicolumn_autocomplete.html',
-						'Ace editor': 'widgets/ace-editor.html',
+						'Multicolumn autocomplete': 'contribute.md',
+						'Ace editor': 'widgets/ace.html',
 						'Chart': 'contribute.md',
 						'Graph': 'contribute.md',
 						'Google map': 'contribute.md',
@@ -96,18 +134,8 @@
 						'Random user list': 'demos/user-list.html',
 					}
 				}
-			},
-			computed: {
-				example_url: function() {
-					var s = this.get('selected')
-					if( !s || !s.example )
-						return "";
-					else
-						return this.get('groups.' + s.group + '.' + s.example)
-				}
 			}
 		});
 	</script>
-	
 </body>
 </html>

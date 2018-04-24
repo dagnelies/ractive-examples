@@ -63,13 +63,13 @@
 	
 	<script id='template' type='text/ractive'>
 		<div class="form-inline bg-primary" style="padding:5px 10px;">
-			<button class="btn btn-default"><i class="glyphicon glyphicon-play"></i> &nbsp; Run</button>
+			<button class="btn btn-default" on-click="@.run()"><i class="glyphicon glyphicon-play"></i> &nbsp; Run</button>
 			&nbsp;
-			<input type="checkbox" /> Autorun
+			<input type="checkbox" class="disabled" /> Autorun
 			<div class="pull-right">
-				<button class="btn btn-default"><i class="glyphicon glyphicon-cloud-download"></i> &nbsp; Load URL</button>
+				<button class="btn btn-default disabled"><i class="glyphicon glyphicon-cloud-download"></i> &nbsp; Load URL</button>
 				<input class="form-control" value="{{url}}" size="100" />
-				<button class="btn btn-default"><i class="glyphicon glyphicon-cloud-upload"></i> &nbsp; Save as URL</button>
+				<button class="btn btn-default disabled"><i class="glyphicon glyphicon-cloud-upload"></i> &nbsp; Save as URL</button>
 			</div>
 		</div>
 		<split direction="horizontal" class="panes">
@@ -104,18 +104,16 @@
 				url: window.location.search.substr(5) || 'demos/user-list.html',
 				script: '',
 				template: '',
-				headers: ''
+				headers: '',
+				html: ''
 			},
-			computed: {
-				html: function() {
-					return ''
-					var value = '<!DOCTYPE html>\n<html><head>' + this.get('headers') + '\n</head>\n<body>\n'
-					value += '\t<div id="target"></div>\n'
-					value += '\t<' + 'script id="template" type="ractive">' + this.get('template') + '\n\t<' + '/script>\n'
-					value += '\t<' + 'script>' + this.get('script') + '\n\t<' + '/script>\n'
-					value += '</body></html>'
-					return value
-				}
+			run: function() {
+				var value = '<!DOCTYPE html>\n<html><head>' + this.get('headers') + '\n</head>\n<body>\n'
+				value += '\t<div id="target"></div>\n'
+				value += '\t<' + 'script id="template" type="ractive">' + this.get('template') + '\n\t<' + '/script>\n'
+				value += '\t<' + 'script>' + this.get('script') + '\n\t<' + '/script>\n'
+				value += '</body></html>'
+				this.set('html', value);
 			},
 			observe: {
 				url: function(newUrl) {
@@ -144,7 +142,8 @@
 							self.set({
 								headers: extract(/<head>([^]+?)<\/head>/),
 								template: extract(/<script +id=.template.*?>([^]+?)<\/script>/),
-								script: extract(/<script>([^]+?)<\/script>/)
+								script: extract(/<script>([^]+?)<\/script>/),
+								html: html
 							})
 						},
 						error: function(xhr,msg) {

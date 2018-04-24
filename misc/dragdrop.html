@@ -66,7 +66,8 @@
 				</ul>
 			</div>
 			<div class="col-sm-6">
-				<ul class="list-group" ondrop="drop(event)" ondragover="allowDrop(event)" style="min-height:100px;">
+				<ul class="list-group" ondrop="drop(event)" ondragover="allowDrop(event)">
+					<li class="list-group-item">Drop stuff here</li>
 				</ul>
 			</div>
 		</div>
@@ -75,27 +76,41 @@
 	</div>
 
 	<script id='template' type='text/ractive'>
-		<h2>Data-based</h2>
+	
+		<h2>Data-bound</h2>
 		<div class="row">
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<ul class="list-group">
 					{{#each fruits}}
-						<li class="list-group-item" draggable="true" on-dragstart="drag(@event, @keypath)">{{this}}</li>
+						<li class="list-group-item" draggable="true" on-dragstart="@this.drag(@event, @keypath)">{{this}}</li>
 					{{/each}}
 				</ul>
 			</div>
-			<div class="col-sm-4">
-				<ul class="list-group" on-drop="drop(@event)" on-dragover="allowDrop(@event)" style="min-height:100px;">
+			<div class="col-sm-6">
+				<ul class="list-group" on-drop="@this.drop(@event)" on-dragover="@this.allowDrop(@event)">
 				{{#each dropped}}
 					<li class="list-group-item">{{this}}</li>
 				{{/each}}
+					<li class="list-group-item">Drop stuff here</li>
 				</ul>
 			</div>
-			<div class="col-sm-4">
-				<ul class="list-group" as-dropzone="'copy|move|replace my.target.keypath'">
-					{{#each my.target.keypath}}
+		</div>
+		
+		<h2>Draggable &amp; dropzone</h2>
+		<div class="row">
+			<div class="col-sm-6">
+				<ul class="list-group">
+					{{#each fruits}}
+						<li class="list-group-item" as-draggable="">{{this}}</li>
+					{{/each}}
+				</ul>
+			</div>
+			<div class="col-sm-6">
+				<ul class="list-group" as-dropzone="'copy_to dropped'">
+					{{#each dropped}}
 						<li class="list-group-item" as-draggable>{{this}}</li>
 					{{/each}}
+						<li class="list-group-item">Drop stuff here</li>
 				</ul>
 			</div>
 		</div>
@@ -116,8 +131,35 @@
 			ev.currentTarget.innerHTML += data;
 		}
 
-		Ractive.decorators['draggable'] = {}
-		Ractive.decorators['dropzone'] 0 {}
+		Ractive.decorators['draggable'] = function(node, kp) {
+			node.draggable = true;
+			node.addEventListener('drag', function(ev) {
+				ev.dataTransfer.setData("text", kp);
+			});
+			return {
+				teardown: function() {
+					node.removeEventListener('drag');
+				}
+			};
+		}
+		
+		Ractive.decorators['dropzone'] = function(node, action, target, source) {
+			node.addEventListener('dragover', function(ev) {
+				ev.preventDefault();
+			});
+			node.addEventListener('drop', function(ev) {
+				ev.preventDefault();
+				var kp = ev.dataTransfer.getData("text");
+				this.push(target, this.get(kp));
+			});
+			return {
+				teardown: function() {
+					node.removeEventListener('dragover');
+					node.removeEventListener('drop');
+				}
+			};
+		}
+		
 		
 		var ractive = new Ractive({
 			target: '#target',

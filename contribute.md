@@ -1,40 +1,13 @@
-<!doctype html>
-<html>
-<head>
-	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
-	<!-- JQuery -->
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-	<!-- Ractive -->
-	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
-	<!-- A bit of style -->
-	<style>
-		body {
-			background-color:#eee;
-			min-height:100%;
-			font-family:Voltaire;
-		}
-	</style>
-</head>
-<body>
-	<div class="container">
-		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
-		<h1>Title</h1>
-		
-		<div id="target"></div>
-	</div>
 
-	<script id='template' type='text/ractive'>
-		Hello template!
-	</script>
+This example does not yet exist!
+================================
 
-	<script>
-		var ractive = new Ractive({
-			target: '#target',
-			template: '#template'
-		});
-	</script>
-</body>
-</html>
+If you want to contribute, you are welcome to do so.
+Please have a look at the details here:
+
+https://github.com/dagnelies/ractive-examples/tree/gh-pages
+
+Basically, all examples are single HTML pages with a specific structure.
+The template can be found here: 
+
+https://github.com/dagnelies/ractive-examples/blob/gh-pages/template.html
