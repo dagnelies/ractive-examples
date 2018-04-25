@@ -28,7 +28,9 @@
 		<div class="col-sm-4">
 			<ul class="list-group">
 			{{#each people}}
-				<li class="list-group-item" class-active="isLinked(@keypath, 'selected')" on-click="@this.link(@keypath, 'selected')">{{firstname}} {{lastname}}</li>
+				<li class="list-group-item" class-active=". == ~/selected" on-click="@this.link(@keypath, 'selected')">
+					{{firstname}} {{lastname}}
+				</li>
 			{{/each}}
 			</ul>
 		</div>
@@ -60,7 +62,8 @@
 				},{
 					firstname: "Charlie",
 					lastname: "Angel"
-				}]
+				}],
+				selected: null
 			}
 		});
 	</script>
