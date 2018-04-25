@@ -35,12 +35,12 @@
 			</ul>
 		</div>
 		<div class="col-sm-4">
-			{{#if selected}}
+			{{#with selected}}
 				<label>First name</label>
-				<input class="form-control" value="{{selected.firstname}}" />
+				<input class="form-control" value="{{.firstname}}" />
 				<label>Last name</label>
-				<input class="form-control" value="{{selected.lastname}}" />
-			{{/if}}
+				<input class="form-control" value="{{.lastname}}" />
+			{{/with}}
 		</div>
 		<div class="col-sm-4">
 			The data:
@@ -62,8 +62,7 @@
 				},{
 					firstname: "Charlie",
 					lastname: "Angel"
-				}],
-				selected: null
+				}]
 			}
 		});
 	</script>
