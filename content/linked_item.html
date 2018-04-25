@@ -26,9 +26,9 @@
 	
 	<script id='template' type='text/ractive'>
 		<div class="col-sm-4">
-			<ul>
+			<ul class="list-group">
 			{{#each people}}
-				<li><button on-click="@this.link(@keypath, 'selected')">Select</button> {{firstname}} {{lastname}}</li>
+				<li class="list-group-item" class-active="isLinked(@keypath, 'selected')" on-click="@this.link(@keypath, 'selected')">{{firstname}} {{lastname}}</li>
 			{{/each}}
 			</ul>
 		</div>
