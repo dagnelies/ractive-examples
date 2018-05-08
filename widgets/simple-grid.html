@@ -36,7 +36,7 @@
 			{{/if}}
 			<tbody>
 				{{#each rows as row}}
-					<tr class-info="this == ~/selected" on-click="@.link(@keypath, 'selected')">
+					<tr class-info="this == ~/selectedBis" on-click="@.link(@keypath, 'selectedBis')">
 					{{#each ~/fields as f}}
 						<td>{{row[f]}}</td>
 					{{/each}}
@@ -46,14 +46,12 @@
 		</table>
 		
 		<hr/>
-		<p>Selected row: <code>{{JSON.stringify(~/selected)}}</code></p>
+		<p>Selected row: <code>{{JSON.stringify(~/selectedBis)}}</code></p>
 		
 		<h2>As component</h2>
 		
-		<grid rows="{{rows}}" fields="['name','email','age','isActive']" headers="['Who','E-mail', 'Years', 'Active?']" selected="{{~/selected2}}" navigation="true" multiselect="false" />
+		<grid rows="{{rows}}" fields="['name','email','age','isActive']" headers="['Who','E-mail', 'Years', 'Active?']" selected="{{~/selectedBis}}" navigation="true" multiselect="false" />
 		
-		<hr/>
-		<p>Selected row: <code>{{JSON.stringify(~/selected2)}}</code></p>
 		
 	</script>
 
@@ -127,8 +125,7 @@
 			data: {
 				rows: rows,
 				fields: ['name','email','age','isActive'], // not the '_id'
-				headers: ['Name','Email', 'Age', 'Is active?'],
-				selected: null
+				headers: ['Name','Email', 'Age', 'Is active?']
 			}
 		});
 	</script>
