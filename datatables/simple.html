@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+			min-height:100%;
+			font-family:Voltaire;
+		}
+	</style>
+</head>
+<body>
+	<div id="target" class="container"></div>
+
+	<script id='template' type='text/ractive'>
+		<h1>Simple grid</h1>
+		
+		<table class="table table-striped table-hover table-condensed">
+			{{#if ~/headers}}
+				<thead>
+					<tr>
+						{{#each ~/headers}}
+							<th>{{.}}</th>
+						{{/each}}
+					</tr>
+				</thead>
+			{{/if}}
+			<tbody>
+				{{#each rows as row}}
+					<tr class-info="this == ~/selectedBis" on-click="@.link(@keypath, 'selectedBis')">
+					{{#each ~/fields as f}}
+						<td>{{row[f]}}</td>
+					{{/each}}
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+		
+		<hr/>
+		<p>Selected row: <code>{{JSON.stringify(~/selectedBis)}}</code></p>
+		
+		<h2>As component</h2>
+		
+		<grid rows="{{rows}}" fields="['name','email','age','isActive']" headers="['Who','E-mail', 'Years', 'Active?']" selected="{{~/selectedBis}}" navigation="true" multiselect="false" />
+		
+		
+	</script>
+
+	<script>
+		var rows = [
+		  {
+			"_id": "5aec42c858af19316e84500d",
+			"name": "Blackwell Welch",
+			"email": "blackwellwelch@honotron.com",
+			"age": 18,
+			"isActive": false
+		  },
+		  {
+			"_id": "5aec42c80f5d12b51c611d4c",
+			"name": "Reyes Sheppard",
+			"email": "reyessheppard@honotron.com",
+			"age": 85,
+			"isActive": false
+		  },
+		  {
+			"_id": "5aec42c8992aac85cfbacac8",
+			"name": "Burt Giles",
+			"email": "burtgiles@honotron.com",
+			"age": 34,
+			"isActive": true
+		  },
+		  {
+			"_id": "5aec42c8c2feef46725881c8",
+			"name": "Ronda Travis",
+			"email": "rondatravis@honotron.com",
+			"age": 86,
+			"isActive": false
+		  },
+		  {
+			"_id": "5aec42c86ccbdaeeffbceee0",
+			"name": "Aguirre Leon",
+			"email": "aguirreleon@honotron.com",
+			"age": 61,
+			"isActive": false
+		  }
+		];
+		
+		Ractive.components['grid'] = Ractive.extend({
+			template: `<table class="table table-striped table-hover table-condensed">
+				{{#if ~/headers}}
+					<thead>
+						<tr>
+							{{#each ~/headers}}
+								<th>{{.}}</th>
+							{{/each}}
+						</tr>
+					</thead>
+				{{/if}}
+				<tbody>
+					{{#each rows as row}}
+						<tr class-info="this == ~/selected" on-click="@.link(@keypath, 'selected')">
+						{{#each ~/fields as f}}
+							<td>{{row[f]}}</td>
+						{{/each}}
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+			<p>Selected row: <code>{{JSON.stringify(~/selected)}}</code></p>
+			`
+		})
+		
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				rows: rows,
+				fields: ['name','email','age','isActive'], // not the '_id'
+				headers: ['Name','Email', 'Age', 'Is active?']
+			}
+		});
+	</script>
+</body>
+</html>
