@@ -9,7 +9,7 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<!-- Ractive -->
 	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
-	<script src='iro.min.js'></script>
+	<script src='https://dagnelies.github.io/ractive-examples/widgets/iro.min.js'></script>
 	<!-- A bit of style -->
 	<style>
 		body {
@@ -24,7 +24,7 @@
 
 	<script id='template' type='text/ractive'>
 		<div class="col-xs-6">
-			<color-picker color="{{myColor}}" width="200" height="200"/>
+			<color-picker color="{{myColor}}" width="200" height="200" wheelLightness="false" />
 		</div>
 		<div class="col-xs-6">
 			<h2>{{myColor}}</h2>
