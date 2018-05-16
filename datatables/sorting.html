@@ -9,6 +9,8 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<!-- Ractive -->
 	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- Datatable -->
+	<script src="datatable.js"></script>
 	<!-- A bit of style -->
 	<style>
 		body {
@@ -22,13 +24,33 @@
 	<div id="target" class="container"></div>
 
 	<script id='template' type='text/ractive'>
+		<h2>Datatable with navigation</h2>
+		
+		<p><input type="checkbox" checked="{{selectable}}" /> Enable selection</p>
+		<p><input type="checkbox" checked="{{multiselect}}" disabled="{{!selectable}}" /> Enable multiselect</p>
+		<p><input type="checkbox" checked="{{navigable}}"  disabled="{{!selectable}}" /> Keyboad navigation</p>
 		
 		<div class="row">
-			<datatable rows="{{rows}}" fields="['name','email','age','isActive']" headers="['Name','Email', 'Age', 'Is active?']" selected="{{~/selectedItem}}" navigable="true" selectable="true" />
-			<p>Selected row: <code>{{JSON.stringify(~/selectedItem)}}</code></p>
+			<datatable rows="{{rows}}" fields="['name','email','age','isActive']" headers="['Name','Email', 'Age', 'Is active?']" selected="{{selected}}" navigable="{{navigable}}" selectable="{{selectable}}" />
+			<p>Selected row: <code>{{JSON.stringify(selected)}}</code></p>
 		</div>
 		
+		{{#if !multiselect && selected}}
+			<input value="{{selected.name}}" />
+		{{/if}}
 		
+		<h2>Datatable with custom rendering</h2>
+		
+		<datatable rows="{{rows}}" headers="['Name','Email', 'Age', 'Is active?']" override="cells" navigable="true" selectable="true" >
+			<td><input value="{{row.name}}" /></td>
+			<td>{{row.email}}</td>
+			<td><i>{{row.age}}</i></td>
+			<td><span style="color:{{#if row.isActive}}green{{else}}red{{/if}}">{{row.isActive}}</span></td>
+		</datatable>
+		
+		<h3>Remote search</h3>
+		<input value="{{search}}" />
+		<datatable url="https://api.themoviedb.org/3/search/movie?api_key=2498a34e67fe4a6a0a209316d830d942&query={{search}}&page=1" prefix="results" headers="['Title', 'Release', 'Plot']" fields="['title','release_date','overview']"/>
 	</script>
 
 	<script>
@@ -69,59 +91,6 @@
 			"isActive": false
 		  }
 		];
-		
-		Ractive.components['datatable'] = Ractive.extend({
-			template: `<table class="table table-striped table-hover table-condensed" tabindex="0" on-keypress="@.onkeypress(@event)">
-				{{#if ~/headers}}
-					<thead>
-						<tr>
-							{{#each ~/headers}}
-								<th>{{.}}</th>
-							{{/each}}
-						</tr>
-					</thead>
-				{{/if}}
-				<tbody>
-					{{#each rows as row}}
-						<tr class-info="@index == ~/selectedIndex" on-click="@.select(@index)">
-							{{#each ~/fields as f}}
-								<td>{{row[f]}}</td>
-							{{/each}}
-						</tr>
-					{{/each}}
-				</tbody>
-			</table>
-			`,
-			onkeypress: function(event) {
-				if( !this.get('navigable') )
-					return;
-				console.log(event);
-				
-				var sel = this.get('selectedIndex');
-				var len = this.get('rows.length');
-				
-				if( event.keyCode == 38 && sel > 0 ) // up
-					this.set('selectedIndex', sel-1);
-				else if( event.keyCode == 40 && sel < len-1 ) // down
-					this.set('selectedIndex', sel+1);
-			},
-			select: function(index) {
-				if( !this.get('selectable') )
-					return;
-					
-				this.set('selectedIndex', index);
-			},
-			observe: {
-				selectedIndex: function(value) {
-					if( value >= 0 ) {
-						//this.set('rows.' + value, 'selected')
-						this.updating = true;
-						this.set('selected', this.get('rows.' + value));
-						this.updating = false;
-					}
-				}
-			}
-		});
 		
 		var ractive = new Ractive({
 			target: '#target',
