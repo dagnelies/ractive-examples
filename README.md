@@ -1,6 +1,6 @@
 ## Demos
 
-- https://dagnelies.github.io/ractive-examples/user-list.html
+- https://dagnelies.github.io/ractive-examples
 
 ## Sources
 
