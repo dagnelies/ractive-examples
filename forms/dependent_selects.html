@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='counties.js'></script>
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+			min-height:100%;
+			font-family:Voltaire;
+		}
+	</style>
+</head>
+<body>
+	<div id="target" class="container"></div>
+
+	<script id='template' type='text/ractive'>
+		<label>State:</label>
+		<select value="{{state}}" class="form-control">
+			<option></option>
+			{{#each allStates}}
+			<option value="{{.id}}">{{.text}}</option>
+			{{/each}}
+		</select>
+		
+		<label>County:</label>
+		<select value="{{county}}" class="form-control" disabled="{{!state}}">
+			<option></option>
+			{{#each allCounties[ ~/state ]}}
+			<option>{{.}}</option>
+			{{/each}}
+		</select>
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				state: null,
+				county: null,
+				allStates: states,
+				allCounties: propertyStateCounties
+			}
+		});
+	</script>
+</body>
+</html>
