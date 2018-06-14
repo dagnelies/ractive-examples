@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+			min-height:100%;
+			font-family:Voltaire;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<a class="pull-right" href="editor.html?url=template.html">View/Edit this code</a>
+		<div id="target"></div>
+	</div>
+
+	<script id='template' type='text/ractive'>
+		<button onclick="alert('Hey!')">onclick="alert('Hey!')"</button>
+		<button on-click="@this.alert('Hey!')">on-click="@this.alert('Hey!')"</button>
+		<button on-click="@global.alert('Hey!')">on-click="@global.alert('Hey!')"</button>
+		<button on-click="this.alert('Hey!')">on-click="this.alert('Hey!')"</button>
+		
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			alert: function(msg) {
+				window.alert('Ractive instance scope: ' + msg);
+			},
+			data: {
+				alert: function(msg) {
+					window.alert('Local data scope: ' + msg);
+				}
+			}
+		});
+	</script>
+</body>
+</html>
