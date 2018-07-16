@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive@0.10.1/ractive.js'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+			min-height:100%;
+			font-family:Voltaire;
+		}
+		h2 {
+			color: #729D34;
+		}
+	</style>
+</head>
+<body>		
+	<div id="target" class="container"></div>
+	
+	<script id='template' type='text/ractive'>
+		<div class="col-sm-4">
+			<ul>
+			{{#each people}}
+				<li><button on-click="@this.link(@keypath, 'selected')">Select</button> {{firstname}} {{lastname}}</li>
+			{{/each}}
+			</ul>
+		</div>
+		<div class="col-sm-4">
+			{{#if selected}}
+				<label>First name</label>
+				<input class="form-control" value="{{selected.firstname}}" />
+				<label>Last name</label>
+				<input class="form-control" value="{{selected.lastname}}" />
+			{{/if}}
+		</div>
+		<div class="col-sm-4">
+			The data:
+			<pre>{{JSON.stringify(this, null, 2)}}</pre>
+		</div>
+	</script>
+
+	<script>
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				people: [{
+					firstname: "Alice",
+					lastname: "Wonderlands"
+				},{
+					firstname: "Bob",
+					lastname: "Marley"
+				},{
+					firstname: "Charlie",
+					lastname: "Angel"
+				}]
+			}
+		});
+	</script>
+</body>
+</html>
