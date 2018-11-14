@@ -2,7 +2,7 @@
 
 Ractive.components['datatable'] = Ractive.extend({
 	lazy: true,
-	template: `<table class="table table-striped table-hover table-condensed" tabindex="0" on-keypress="@.onkeypress(@event)">
+	template: `<table class="table table-striped table-hover table-condensed" tabindex="0" on-keydown="@.onkeydown(@event)">
 		{{#if ~/headers}}
 			<thead>
 				<tr>
@@ -102,7 +102,7 @@ Ractive.components['datatable'] = Ractive.extend({
 			return result;
 		}
 	},
-	onkeypress: function(event) {
+	onkeydown: function(event) {
 		if( !this.get('navigable') )
 			return;
 		console.log(event);
