@@ -17,7 +17,21 @@
 		.tree label::after {
 			content: ':';
 		}
-		.tree node_string {
+		.tree .node_string::before,
+		.tree .node_string::after {
+			content: '"';
+		}
+		.tree .node_string {
+			color: purple;
+		}
+		.tree .node_number {
+			color: blue;
+		}
+		.tree .node_boolean {
+			color: green;
+		}
+		.tree .node_null {
+			color: gray;
 		}
 	</style>
 </head>
@@ -38,7 +52,7 @@
 				<a href="#" on-click="@.toggle('expanded')">&#9650; <label>{{name}}</label> {}</a>
 			{{/if}}
 		{{else}}
-			<span class="node_{{type}}"><label>{{name}}</label> {{content}}</span>
+			<label>{{name}}</label> <span class="node_{{type}}">{{content}}</span>
 		{{/if}}
 	</script>
 
@@ -59,6 +73,8 @@
 				tree: {
 					"glossary": {
 						"title": "example glossary",
+						"pages": 234,
+						"revised": false,
 						"GlossDiv": {
 							"title": "S",
 							"GlossList": {
