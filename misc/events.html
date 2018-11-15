@@ -26,11 +26,30 @@
 	</div>
 
 	<script id='template' type='text/ractive'>
-		<button onclick="alert('Hey!')">onclick="alert('Hey!')"</button>
-		<button on-click="@this.alert('Hey!')">on-click="@this.alert('Hey!')"</button>
-		<button on-click="@global.alert('Hey!')">on-click="@global.alert('Hey!')"</button>
-		<button on-click="this.alert('Hey!')">on-click="this.alert('Hey!')"</button>
+		<p class="form-inline">
+			Hello who?
+			<input class="form-control" value="{{name}}" />
+		</p>
 		
+		<p>
+			<button class="btn btn-primary" onclick="alert('Hey {{name}}!')">onclick="alert('Hey! \{{name}}')"</button>
+			This invokes the same as plain javascript does.
+		</p>
+		
+		<p>
+			<button class="btn btn-primary" on-click="@.alert('Hey ' + name + '!')">on-click="@.alert('Hey ' + name + '!')"</button>
+			This invokes the "alert" method of the current ractive instance.
+		</p>
+		
+		<p>
+			<button class="btn btn-primary" on-click="@global.alert('Hey!')">on-click="@global.alert('Hey!')"</button>
+			This invokes the alert method in the global scope.
+		</p>
+		
+		<p>
+			<button class="btn btn-primary" on-click="this.alert('Hey!')">on-click="this.alert('Hey!')"</button>
+			This is doable to, but IMHO not recommended. It will invoke the alert method from the data model.
+		</p>
 	</script>
 
 	<script>
