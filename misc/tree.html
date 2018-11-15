@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+	<!-- A bit of style -->
+	<style>
+		body {
+			background-color:#eee;
+		}
+		.tree li {
+			list-style-type: none;
+		}
+		.tree label::after {
+			content: ':';
+		}
+		.tree node_string {
+		}
+	</style>
+</head>
+<body>
+	<div id="target" class="container tree"></div>
+
+	<script id="node" type="ractive">
+		{{#if type == 'object'}}
+			{{#if expanded}}
+				<a href="#" on-click="@.toggle('expanded')">&#9660; <label>{{name}}</label> {</a>
+				<ul>
+				{{#each content}}
+					<li><node content="{{.}}" name="{{@key}}" expanded="false" /></li>
+				{{/each}}
+				</ul>
+				}
+			{{else}}
+				<a href="#" on-click="@.toggle('expanded')">&#9650; <label>{{name}}</label> {}</a>
+			{{/if}}
+		{{else}}
+			<span class="node_{{type}}"><label>{{name}}</label> {{content}}</span>
+		{{/if}}
+	</script>
+
+
+	<script>
+	Ractive.components.node = Ractive.extend({
+			template: '#node',
+			computed: {
+				type: function() {
+					return typeof(this.get('content'));
+				}
+			}
+		});
+		var ractive = new Ractive({
+			target: '#target',
+			template: '<p>The tree:</p><node content="{{tree}}" />',
+			data: {
+				tree: {
+					"glossary": {
+						"title": "example glossary",
+						"GlossDiv": {
+							"title": "S",
+							"GlossList": {
+								"GlossEntry": {
+									"ID": "SGML",
+									"SortAs": "SGML",
+									"GlossTerm": "Standard Generalized Markup Language",
+									"Acronym": "SGML",
+									"Abbrev": "ISO 8879:1986",
+									"GlossDef": {
+										"para": "A meta-markup language, used to create markup languages such as DocBook.",
+										"GlossSeeAlso": ["GML", "XML"]
+									},
+									"GlossSee": "markup"
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+	</script>
+</body>
+</html>
