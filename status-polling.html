@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+	<!-- Ractive -->
+	<script src='https://cdn.jsdelivr.net/npm/ractive'></script>
+</head>
+<body>
+	<div id="target" class="container"></div>
+
+	<script id='template' type='text/ractive'>
+		<h1>Hello {{foo}}!</h1>
+		<elo-webapp-status url="http://159.69.25.254:9090/ix-ELO/ix?cmd=status&mode=text" />
+	</script>
+
+	<script>
+	
+		Ractive.components['elo-webapp-status'] = Ractive.extend({
+			template: `<div class="alert alert-{{color}}">
+				<small class="pull-right"><a href="{{url}}">{{url}}</a></small>
+				<p>{{status}}</p>
+				{{error}}
+				</div>`,
+			computed: {
+				color() {
+					switch(this.get('status')) {
+						case 'RUNNING': return 'success';
+						case 'INITIALIZING': return 'warning';
+						case 'ERROR': return 'danger';
+						default: return 'info';
+					}
+				}
+			},
+			oncomplete: function() {
+				var self = this;
+				function updateStatus() {
+					$.ajax({
+						url: self.get('url'),
+						method: 'GET',
+						//dataType: 'json',
+						success: function(res) {
+							console.log(res);
+							self.set('res', res);
+							if( res.indexOf('Status=RUNNING') >= 0 ) {
+								self.set('status', 'RUNNING')
+							}
+							else if( res.indexOf('Status=ERROR') >= 0 ) {
+								self.set('status', 'ERROR')
+								self.set('error', res)
+							}
+							else {
+								if( res.indexOf('Status=INITIALIZING') >= 0 )
+									self.set('status', 'INITIALIZING')
+								else
+									self.set('status', '???')
+								setTimeout(updateStatus, 1000);
+							}
+						},
+						error: function(xhr, msg) {
+							self.set('status', msg);
+							setTimeout(updateStatus, 1000);
+						}
+					})
+				}
+				updateStatus();
+			}
+		})
+		
+		var ractive = new Ractive({
+			target: '#target',
+			template: '#template',
+			data: {
+				foo: 'my template!'
+			}
+		});
+	</script>
+</body>
+</html>
