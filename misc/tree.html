@@ -40,16 +40,16 @@
 
 	<script id="node" type="ractive">
 		{{#if type == 'object'}}
+			<a href="#" on-click="@.toggle('expanded')">
+				{{#if expanded}}&#11206;{{else}}&#11208;{{/if}}
+				<label>{{name}}</label>
+			</a>
 			{{#if expanded}}
-				<a href="#" on-click="@.toggle('expanded')">&#9660; <label>{{name}}</label> {</a>
 				<ul>
 				{{#each content}}
 					<li><node content="{{.}}" name="{{@key}}" expanded="false" /></li>
 				{{/each}}
 				</ul>
-				}
-			{{else}}
-				<a href="#" on-click="@.toggle('expanded')">&#9650; <label>{{name}}</label> {}</a>
 			{{/if}}
 		{{else}}
 			<label>{{name}}</label> <span class="node_{{type}}">{{content}}</span>
@@ -68,9 +68,8 @@
 		});
 		var ractive = new Ractive({
 			target: '#target',
-			template: '<p>The tree:</p><node content="{{tree}}" />',
+			template: '<p>The tree:</p><node name="glossary" content="{{glossary}}" expanded="true" />',
 			data: {
-				tree: {
 					"glossary": {
 						"title": "example glossary",
 						"pages": 234,
@@ -93,7 +92,6 @@
 							}
 						}
 					}
-				}
 			}
 		});
 	</script>
